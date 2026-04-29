@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NYRV — Independent Proof Infrastructure</title>
+    <meta name="description" content="Independent proof infrastructure for automated systems. Hash-chained ledger anchored to public transparency logs.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Alumni+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Sans:wght@400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --vegas-gold: #D7BE69;
+            --vegas-gold-light: #E8D494;
+            --vegas-gold-dark: #B89F4A;
+
+            --lapis: #76D0C6;
+            --lapis-light: #76D0C6;
+            --lapis-dark: #4BAFA5;
+
+            --ink: #121F3E;
+            --ink-light: #162542;
+            --ink-mid: #1A2D50;
+            --slate: #1E3358;
+            --mist: #8A9BB4;
+            --cloud: #F3F6F9;
+            --white: #F3F6F9;
+
+            --proof-glow: rgba(215, 190, 105, 0.15);
+            --lapis-glow: rgba(118, 208, 198, 0.15);
+
+            --font-display: 'Alumni Sans', Georgia, sans-serif;
+            --font-mono: 'Space Mono', monospace;
+            --font-body: 'DM Sans', -apple-system, sans-serif;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-body);
+            font-size: 1.125rem;
+            font-weight: 400;
+            background: var(--ink);
+            color: var(--cloud);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 1.5rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            background: linear-gradient(to bottom, var(--ink) 0%, transparent 100%);
+        }
+
+        .logo {
+            font-family: var(--font-mono);
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--vegas-gold);
+            letter-spacing: 0.2em;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--mist);
+            text-decoration: none;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--vegas-gold);
+        }
+
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 6rem 2rem;
+            position: relative;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, var(--proof-glow) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .hero-logo {
+            max-width: 480px;
+            width: 90%;
+            height: auto;
+            margin-bottom: 2.5rem;
+            opacity: 0;
+            animation: fadeUp 0.8s ease 0.1s forwards;
+        }
+
+        .hero-label {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--lapis-light);
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: fadeUp 0.8s ease 0.2s forwards;
+        }
+
+        .hero-title {
+            font-family: var(--font-display);
+            font-size: clamp(4rem, 15vw, 12rem);
+            font-weight: 600;
+            color: var(--vegas-gold);
+            line-height: 0.9;
+            letter-spacing: -0.02em;
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: fadeUp 0.8s ease 0.4s forwards;
+        }
+
+        .hero-subtitle {
+            font-family: var(--font-body);
+            font-size: 1.25rem;
+            color: var(--cloud);
+            max-width: 540px;
+            margin-bottom: 3rem;
+            opacity: 0;
+            animation: fadeUp 0.8s ease 0.6s forwards;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            opacity: 0;
+            animation: fadeUp 0.8s ease 0.8s forwards;
+        }
+
+        .btn {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            padding: 1rem 2rem;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: var(--vegas-gold);
+            color: var(--ink);
+        }
+
+        .btn-primary:hover {
+            background: var(--vegas-gold-light);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px var(--proof-glow);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--cloud);
+            border: 1px solid var(--slate);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--lapis);
+            color: var(--white);
+        }
+
+        section {
+            padding: 8rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-label {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            color: var(--lapis-light);
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-family: var(--font-display);
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 600;
+            color: var(--white);
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+        }
+
+        .section-subtitle {
+            font-size: 1.125rem;
+            color: var(--mist);
+            max-width: 600px;
+            margin-bottom: 4rem;
+        }
+
+        .statement {
+            text-align: center;
+            padding: 10rem 2rem;
+            position: relative;
+        }
+
+        .statement::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 1px;
+            height: 120px;
+            background: linear-gradient(to bottom, transparent, var(--vegas-gold), transparent);
+        }
+
+        .statement-text {
+            font-family: var(--font-display);
+            font-size: clamp(1.75rem, 4vw, 2.5rem);
+            color: var(--cloud);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.5;
+        }
+
+        .statement-text em {
+            color: var(--vegas-gold);
+            font-style: italic;
+        }
+
+        .directives {
+            background: var(--ink);
+            padding: 8rem 2rem;
+            margin: 0;
+            max-width: none;
+        }
+
+        .directives-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .directives-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .directive-card {
+            background: var(--ink-light);
+            border: 1px solid var(--slate);
+            padding: 2.5rem;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .directive-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--vegas-gold), var(--lapis));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+        }
+
+        .directive-card:hover {
+            border-color: var(--vegas-gold-dark);
+            transform: translateY(-4px);
+        }
+
+        .directive-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .directive-number {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            color: var(--lapis-light);
+            letter-spacing: 0.2em;
+            margin-bottom: 1.5rem;
+        }
+
+        .directive-title {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            color: var(--vegas-gold);
+            margin-bottom: 1rem;
+        }
+
+        .directive-text {
+            font-size: 0.95rem;
+            color: var(--mist);
+            line-height: 1.7;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1px;
+            background: var(--slate);
+            border: 1px solid var(--slate);
+        }
+
+        .feature {
+            background: var(--ink-light);
+            padding: 3rem;
+            position: relative;
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 1.5rem;
+            color: var(--vegas-gold);
+        }
+
+        .feature-title {
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            color: var(--white);
+            letter-spacing: 0.05em;
+            margin-bottom: 0.75rem;
+        }
+
+        .feature-text {
+            font-size: 0.9rem;
+            color: var(--mist);
+            line-height: 1.6;
+        }
+
+        .flow {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 2rem;
+            position: relative;
+        }
+
+        .flow::before {
+            content: '';
+            position: absolute;
+            top: 40px;
+            left: 80px;
+            right: 80px;
+            height: 1px;
+            background: linear-gradient(90deg, var(--vegas-gold), var(--lapis), var(--vegas-gold));
+        }
+
+        .flow-step {
+            flex: 1;
+            text-align: center;
+            position: relative;
+        }
+
+        .flow-number {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--ink-light);
+            border: 2px solid var(--vegas-gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-mono);
+            font-size: 1.5rem;
+            color: var(--vegas-gold);
+            margin: 0 auto 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .flow-title {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: var(--white);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        .flow-text {
+            font-size: 0.9rem;
+            color: var(--mist);
+        }
+
+        .artifact-section {
+            background: var(--ink-light);
+            padding: 8rem 2rem;
+            max-width: none;
+            margin: 0;
+        }
+
+        .artifact-inner {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .artifact-content {
+            padding-right: 2rem;
+        }
+
+        .artifact-display {
+            background: var(--ink);
+            border: 1px solid var(--slate);
+            padding: 1.5rem;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            line-height: 1.8;
+            color: var(--mist);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .artifact-display::before {
+            content: 'EXAMPLE STRUCTURE';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 0.5rem 1rem;
+            background: var(--lapis-dark);
+            color: var(--cloud);
+            font-size: 0.65rem;
+            letter-spacing: 0.2em;
+        }
+
+        .artifact-display code {
+            display: block;
+            margin-top: 2rem;
+            white-space: pre-wrap;
+        }
+
+        .artifact-display .key {
+            color: var(--lapis-light);
+        }
+
+        .artifact-display .value {
+            color: var(--vegas-gold);
+        }
+
+        .artifact-display .string {
+            color: var(--cloud);
+        }
+
+        .artifact-note {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            color: var(--mist);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-top: 1.5rem;
+            text-align: right;
+        }
+
+        .status-section {
+            background: var(--ink);
+            padding: 6rem 2rem;
+            max-width: none;
+            margin: 0;
+            border-top: 1px solid var(--slate);
+            border-bottom: 1px solid var(--slate);
+        }
+
+        .status-inner {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .status-text {
+            font-family: var(--font-body);
+            font-size: 1rem;
+            color: var(--cloud);
+            line-height: 1.8;
+            max-width: 640px;
+            margin: 0 auto;
+        }
+
+        .status-text a {
+            color: var(--vegas-gold);
+            text-decoration: none;
+            border-bottom: 1px solid var(--vegas-gold-dark);
+        }
+
+        .status-text a:hover {
+            border-bottom-color: var(--vegas-gold);
+        }
+
+        .cta {
+            text-align: center;
+            padding: 10rem 2rem;
+            position: relative;
+        }
+
+        .cta::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 800px;
+            height: 400px;
+            background: radial-gradient(ellipse, var(--lapis-glow) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .cta-title {
+            font-family: var(--font-display);
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            color: var(--white);
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-text {
+            font-size: 1.125rem;
+            color: var(--mist);
+            max-width: 500px;
+            margin: 0 auto 2.5rem;
+        }
+
+        .principle {
+            text-align: center;
+            padding: 5rem 2rem 6rem;
+            font-family: var(--font-display);
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            color: var(--vegas-gold);
+            letter-spacing: 0.05em;
+            font-style: italic;
+            font-weight: 500;
+        }
+
+        footer {
+            border-top: 1px solid var(--slate);
+            padding: 4rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 2rem;
+        }
+
+        .footer-brand {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            max-width: 600px;
+        }
+
+        .footer-logo {
+            font-family: var(--font-mono);
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--vegas-gold);
+            letter-spacing: 0.2em;
+        }
+
+        .footer-parent {
+            font-size: 0.8rem;
+            color: var(--mist);
+            line-height: 1.6;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+            flex-shrink: 0;
+        }
+
+        .footer-links a {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            color: var(--mist);
+            text-decoration: none;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--vegas-gold);
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem 1.5rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero {
+                padding: 8rem 1.5rem 4rem;
+            }
+
+            .hero-logo {
+                max-width: 320px;
+            }
+
+            .hero-cta {
+                flex-direction: column;
+                width: 100%;
+                max-width: 300px;
+            }
+
+            .btn {
+                width: 100%;
+                text-align: center;
+            }
+
+            section {
+                padding: 5rem 1.5rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .flow {
+                flex-direction: column;
+                gap: 3rem;
+            }
+
+            .flow::before {
+                display: none;
+            }
+
+            .artifact-inner {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .artifact-content {
+                padding-right: 0;
+            }
+
+            .footer-inner {
+                flex-direction: column;
+                gap: 2rem;
+                text-align: center;
+            }
+
+            .footer-brand {
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="#" class="logo">NYRV</a>
+        <ul class="nav-links">
+            <li><a href="#directives">Directives</a></li>
+            <li><a href="#architecture">Architecture</a></li>
+            <li><a href="#status">Status</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <section class="hero">
+        
+        <span class="hero-label">Neural Yielding Recognition Vector</span>
+        <h1 class="hero-title">Prove it.</h1>
+        <p class="hero-subtitle">Independent proof infrastructure for automated systems. Hash-chained ledger anchored to public transparency logs.</p>
+        <div class="hero-cta">
+            <a href="https://github.com/Saabe-CEO/nyrv" class="btn btn-primary">Verify the Code</a>
+            <a href="#architecture" class="btn btn-secondary">See the Architecture</a>
+        </div>
+    </section>
+
+    <section class="statement">
+        <p class="statement-text">
+            Every compliance platform stores evidence in their own database. That's not proof — <em>that's a promise.</em> NYRV provides the independent verification layer that sits beneath them all.
+        </p>
+    </section>
+
+    <section class="directives" id="directives">
+        <div class="directives-inner">
+            <span class="section-label">Core Directives</span>
+            <h2 class="section-title">Constitutional Principles</h2>
+            <p class="section-subtitle">NYRV operates under binding architectural constraints. These aren't policies — they're code, verified by tests.</p>
+
+            <div class="directives-grid">
+                <article class="directive-card">
+                    <span class="directive-number">DIRECTIVE 01</span>
+                    <h3 class="directive-title">Observe Only</h3>
+                    <p class="directive-text">NYRV observes and records. It never decides, never acts, never judges. Recognition without authority.</p>
+                </article>
+
+                <article class="directive-card">
+                    <span class="directive-number">DIRECTIVE 02</span>
+                    <h3 class="directive-title">Append Only</h3>
+                    <p class="directive-text">Events can only be added, never modified or deleted. The ledger is permanent. The record is immutable.</p>
+                </article>
+
+                <article class="directive-card">
+                    <span class="directive-number">DIRECTIVE 03</span>
+                    <h3 class="directive-title">No Content Storage</h3>
+                    <p class="directive-text">We see metadata, never sensitive data. We know that something happened. We never see what it contained.</p>
+                </article>
+
+                <article class="directive-card">
+                    <span class="directive-number">DIRECTIVE 04</span>
+                    <h3 class="directive-title">Independence Always</h3>
+                    <p class="directive-text">No sponsorships. No endorsements. No financial relationships with entities we observe. The proof must be independent.</p>
+                </article>
+
+                <article class="directive-card">
+                    <span class="directive-number">DIRECTIVE 05</span>
+                    <h3 class="directive-title">Capability Ceiling</h3>
+                    <p class="directive-text">NYRV has hard limits. It cannot make autonomous decisions. It cannot execute actions. It cannot expand its own authority.</p>
+                </article>
+
+                <article class="directive-card">
+                    <span class="directive-number">DIRECTIVE 06</span>
+                    <h3 class="directive-title">Verifiable by Third Parties</h3>
+                    <p class="directive-text">Every claim NYRV makes can be independently verified using public infrastructure. Trust no one — verify.</p>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <section id="architecture">
+        <span class="section-label">Architectural Commitments</span>
+        <h2 class="section-title">By Design</h2>
+        <p class="section-subtitle">The architecture is what's tested. Implementation follows the architecture, not the other way around.</p>
+
+        <div class="features-grid">
+            <div class="feature">
+                <svg class="feature-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M24 4L4 14v20l20 10 20-10V14L24 4z"/>
+                    <path d="M4 14l20 10m0 0l20-10m-20 10v20"/>
+                </svg>
+                <h3 class="feature-title">Hash-Chained Integrity</h3>
+                <p class="feature-text">Every event cryptographically links to its predecessor. Tampering at any point breaks the chain. Mathematically provable integrity.</p>
+            </div>
+
+            <div class="feature">
+                <svg class="feature-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <rect x="6" y="6" width="36" height="36" rx="2"/>
+                    <path d="M6 18h36M18 18v24"/>
+                </svg>
+                <h3 class="feature-title">Durable Ledger</h3>
+                <p class="feature-text">PostgreSQL-backed persistence. Append-only schema, enforced in code and at the database level. No update path. No delete path.</p>
+            </div>
+
+            <div class="feature">
+                <svg class="feature-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <circle cx="24" cy="24" r="20"/>
+                    <path d="M24 14v10l7 7"/>
+                </svg>
+                <h3 class="feature-title">Synchronous Evidence</h3>
+                <p class="feature-text">Evidence artifacts returned in the same call as the observation. Your system knows the record was captured before it proceeds.</p>
+            </div>
+
+            <div class="feature">
+                <svg class="feature-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M12 24h24M24 12v24"/>
+                    <circle cx="24" cy="24" r="20"/>
+                </svg>
+                <h3 class="feature-title">Evidence Artifacts</h3>
+                <p class="feature-text">Structured proof returned with every observation. Includes timestamp, hash, chain position, and verification path.</p>
+            </div>
+
+            <div class="feature">
+                <svg class="feature-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M8 12h32v28H8zM16 12V8h16v4"/>
+                    <path d="M18 24h12M18 30h8"/>
+                </svg>
+                <h3 class="feature-title">Anchored to Sigstore</h3>
+                <p class="feature-text">Designed to anchor chain heads to the public Sigstore Rekor transparency log. Independent verification without contacting NYRV.</p>
+            </div>
+
+            <div class="feature">
+                <svg class="feature-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M14 8h20l8 8v28H6V16l8-8z"/>
+                    <path d="M14 8v8H6M34 8v8h8"/>
+                </svg>
+                <h3 class="feature-title">Per-Tenant Isolation</h3>
+                <p class="feature-text">Designed for cryptographic boundaries between organizations. Your evidence chain is yours alone. No commingling by design.</p>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <span class="section-label">Integration</span>
+        <h2 class="section-title">How It Works</h2>
+        <p class="section-subtitle">One call. Synchronous proof. The architecture is simple because the principle is simple.</p>
+
+        <div class="flow">
+            <div class="flow-step">
+                <div class="flow-number">1</div>
+                <h3 class="flow-title">Observe</h3>
+                <p class="flow-text">Your system sends an event to NYRV when an action occurs.</p>
+            </div>
+
+            <div class="flow-step">
+                <div class="flow-number">2</div>
+                <h3 class="flow-title">Record</h3>
+                <p class="flow-text">NYRV hashes, chains, and persists the event to the durable ledger.</p>
+            </div>
+
+            <div class="flow-step">
+                <div class="flow-number">3</div>
+                <h3 class="flow-title">Return</h3>
+                <p class="flow-text">An evidence artifact is returned synchronously with proof of recording.</p>
+            </div>
+
+            <div class="flow-step">
+                <div class="flow-number">4</div>
+                <h3 class="flow-title">Anchor</h3>
+                <p class="flow-text">Chain heads are anchored to the public Sigstore Rekor transparency log. Anyone can verify.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="artifact-section">
+        <div class="artifact-inner">
+            <div class="artifact-content">
+                <span class="section-label">Evidence Structure</span>
+                <h2 class="section-title">What You Get Back</h2>
+                <p class="section-subtitle">Every observation returns a structured artifact with everything needed for independent verification.</p>
+            </div>
+
+            <div>
+                <div class="artifact-display">
+                    <code>{
+  <span class="key">"accepted"</span>: <span class="value">true</span>,
+  <span class="key">"durable"</span>: <span class="value">true</span>,
+  <span class="key">"rid"</span>: <span class="string">"&lt;request-id&gt;"</span>,
+  <span class="key">"timestamp"</span>: <span class="string">"&lt;ISO-8601&gt;"</span>,
+  <span class="key">"hash"</span>: <span class="string">"sha256:&lt;...&gt;"</span>,
+  <span class="key">"chain_position"</span>: <span class="value">&lt;integer&gt;</span>,
+  <span class="key">"previous_hash"</span>: <span class="string">"sha256:&lt;...&gt;"</span>,
+  <span class="key">"verify_url"</span>: <span class="string">"/v1/verify/&lt;rid&gt;"</span>
+}</code>
+                </div>
+                <p class="artifact-note">Example structure. First live artifact pending.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="status-section" id="status">
+        <div class="status-inner">
+            <span class="section-label">Current Status</span>
+            <h2 class="section-title">Pre-launch</h2>
+            <p class="status-text">
+                NYRV is pre-launch. Architecture documented and tested. Production database schema verified. First public anchor to the Sigstore Rekor transparency log: pending. When it lands, this section will link to the public Rekor entry.
+                <br><br>
+                The codebase is open for inspection at <a href="https://github.com/Saabe-CEO/nyrv">github.com/Saabe-CEO/nyrv</a>.
+            </p>
+        </div>
+    </section>
+
+    <section class="cta" id="contact">
+        <h2 class="cta-title">Verify the architecture.</h2>
+        <p class="cta-text">The code, the principles, the test invariants — all open for inspection. Read it. Run the tests. Verify what works.</p>
+        <a href="https://github.com/Saabe-CEO/nyrv" class="btn btn-primary">github.com/Saabe-CEO/nyrv</a>
+    </section>
+
+    <p class="principle">Proof. Not promises.</p>
+
+    <footer>
+        <div class="footer-inner">
+            <div class="footer-brand">
+                <span class="footer-logo">NYRV</span>
+                <span class="footer-parent">NYRV is operated by Neural Yielding Recognition Vector Technologies, Inc. · Delaware C-Corp, in formation · Las Vegas, NV</span>
+            </div>
+            <div class="footer-links">
+                <a href="mailto:khiasafjeter@nyrv.dev">Contact</a>
+                <a href="https://github.com/Saabe-CEO/nyrv">Repo</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
