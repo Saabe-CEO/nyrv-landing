@@ -423,6 +423,23 @@
     margin-bottom: 0;
   }
 
+  /* Card hover state — border and title transition to Vegas Gold */
+  .serves-card, .arch-card, .tier-card, .directive-card {
+    transition: border-color 0.2s ease;
+  }
+
+  .serves-card:hover, .arch-card:hover, .tier-card:hover, .directive-card:hover {
+    border-color: var(--vegas-gold);
+  }
+
+  .serves-card h3, .arch-card h3, .tier-card h3, .directive-card h3 {
+    transition: color 0.2s ease;
+  }
+
+  .serves-card:hover h3, .arch-card:hover h3, .tier-card:hover h3, .directive-card:hover h3 {
+    color: var(--vegas-gold);
+  }
+  
   /* ============================================================
      DIRECTIVES — Specific styling
      ============================================================ */
@@ -913,6 +930,7 @@
     <p>The discipline of operating against an open standard — rather than inventing a proprietary architecture — means NYRV's customers do not have to take NYRV's word for the architecture's correctness. The specification is public, reviewable, and subject to independent technical scrutiny. NYRV's value is the operated infrastructure that implements it.</p>
 
     <p>NYRV is contributing an Agent Action Profile (AAP) to VeritasChain's domain profile series — a forthcoming specification extending VAP to the AI agent verification domain, alongside the published profiles for algorithmic trading, content provenance, and public administration.</p>
+    <p>NYRV's architectural commitment to VCP v1.1 conformance is documented in <a href="https://github.com/Saabe-CEO/nyrv/blob/main/docs/adr/0002-vcp-v1-1-conformance.md" rel="noopener">ADR-0002</a>, available in the repository. The document specifies the conformance commitment and the multi-party institutional witness extension operated as a service layer above the protocol.</p>
 
     <p class="standards-detail">VCP is licensed under CC BY 4.0. NYRV is one implementation; the protocol exists independent of any single operator.</p>
   </div>
