@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Independent verification infrastructure for AI systems. Operated multi-party witnessed transparency log. VCP-conformant, IETF SCITT-aligned.">
+<meta name="description" content="Independent, content-blind provenance infrastructure for automated decisions and AI systems. Open-source verification you can run yourself. VCP v1.1-conformant.">
 <meta name="theme-color" content="#121F3E">
-<title>NYRV — Independent Verification Infrastructure for AI Systems</title>
+<title>NYRV — Independent Provenance Infrastructure for Automated Systems</title>
 
 <!-- Google Fonts: Inter, Oxanium, Philosopher (all SIL OFL licensed) -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -682,7 +682,7 @@
 <body>
 
 <!-- ============================================================ -->
-<!-- NAVIGATION                                                    -->
+<!-- NAVIGATION  (#tiers removed — Tiered Service section cut)     -->
 <!-- ============================================================ -->
 <nav>
   <div class="container">
@@ -692,7 +692,6 @@
       <li><a href="#serves">Who</a></li>
       <li><a href="#directives">Directives</a></li>
       <li><a href="#architecture">Architecture</a></li>
-      <li><a href="#tiers">Tiers</a></li>
       <li><a href="#standards">Standards</a></li>
       <li><a href="#status">Status</a></li>
     </ul>
@@ -713,14 +712,14 @@
 
     <h1>Prove it.</h1>
 
-    <p class="lede">Independent verification infrastructure for AI systems. An operated, multi-party witnessed transparency log producing cryptographic proof any third party can verify.</p>
+    <p class="lede">Independent provenance infrastructure for automated decisions. Producers commit to each decision; NYRV records a commitment it cannot read; and anyone can confirm, in open-source code, that a record binds to exactly the decision claimed — with no trust in NYRV required.</p>
 
     <div class="cta-row">
       <a href="https://github.com/Saabe-CEO/nyrv" class="cta-primary">Verify the Code</a>
       <a href="#architecture" class="cta-secondary">See the Architecture</a>
     </div>
 
-    <p class="hero-statement">Every compliance platform stores evidence in their own database. That's not proof — <em>that's a promise.</em> NYRV provides the independent verification layer that sits beneath them all.</p>
+    <p class="hero-statement">Every compliance platform stores its evidence in its own database. That's not proof — <em>that's a promise.</em> NYRV is the independent layer underneath: content-blind, and built so that what a record binds to doesn't rest on NYRV's word. You check the math yourself.</p>
   </div>
 </section>
 
@@ -732,29 +731,31 @@
     <p class="section-label">The Problem</p>
     <h2>The question "prove it" is no longer hypothetical.</h2>
 
-    <p>AI systems are taking consequential actions. Hiring decisions. Credit determinations. Insurance underwriting. Compliance workflows.</p>
+    <p>Automated systems are taking consequential actions. Hiring decisions. Credit determinations. Insurance underwriting. Content moderation.</p>
 
-    <p>When regulators, auditors, courts, or counterparties demand proof that an AI did what it claimed to do, organizations face a structural gap. Today's evidence lives in vendor databases, self-attested logs, and governance platform dashboards. None of it is independently verifiable.</p>
+    <p>When regulators, auditors, courts, or counterparties demand to see what an automated system did — and proof the record can be trusted — organizations hit a structural gap. Today that evidence lives in vendor databases, self-attested logs, and governance dashboards. None of it is independently verifiable.</p>
 
     <p>That gap is becoming a liability:</p>
 
     <ul class="regulatory-list">
-      <li><strong>EU AI Act</strong> enforcement begins August 2026 (Article 12 requires automatically generated logs).</li>
-      <li><strong>NYC Local Law 144</strong> already requires bias audits for automated employment decisions.</li>
-      <li><strong>CFPB</strong> actively scrutinizes algorithmic lending under fair-lending statutes (ECOA, FCRA).</li>
+      <li><strong>EU AI Act</strong> — Article 12 requires high-risk AI systems to automatically generate logs across their lifetime. The compliance date is in motion (August 2026 as written, provisionally deferred toward December 2027 pending formal adoption); the requirement is not.</li>
+      <li><strong>NYC Local Law 144</strong> has required annual independent bias audits of automated hiring tools since 2023; after a December 2025 State Comptroller audit found enforcement lacking, the city committed to tightening it in 2026.</li>
+      <li><strong>CFPB</strong> scrutinizes algorithmic lending under fair-lending statutes (ECOA, FCRA).</li>
       <li><strong>State insurance regulators</strong> examine algorithmic underwriting and claims handling.</li>
-      <li><strong>EU Digital Services Act</strong> imposes transparency requirements on content moderation systems.</li>
+      <li><strong>EU Digital Services Act</strong> imposes transparency requirements on content moderation.</li>
     </ul>
+
+    <p>The open question was never whether you must keep records. <em>It's whether anyone can trust the records you kept.</em></p>
   </div>
 </section>
 
 <!-- ============================================================ -->
-<!-- WHO NYRV SERVES                                               -->
+<!-- WHO IT'S FOR                                                  -->
 <!-- ============================================================ -->
 <section id="serves">
   <div class="container">
-    <p class="section-label">Who NYRV Serves</p>
-    <h2>Organizations operating AI systems where evidence matters.</h2>
+    <p class="section-label">Who It's For</p>
+    <h2>Organizations running automated systems where the evidence matters.</h2>
 
     <div class="serves-grid">
       <div class="serves-card">
@@ -771,15 +772,15 @@
       </div>
       <div class="serves-card">
         <h3>Content Moderation</h3>
-        <p>Platforms operating under EU Digital Services Act and emerging transparency requirements.</p>
+        <p>Platforms operating under the EU Digital Services Act and emerging transparency requirements.</p>
       </div>
       <div class="serves-card">
         <h3>AI Governance Platforms</h3>
-        <p>Vendors whose customers increasingly require third-party verifiable evidence beneath the platform.</p>
+        <p>Vendors whose customers increasingly require third-party-verifiable evidence beneath the platform.</p>
       </div>
       <div class="serves-card">
         <h3>Audit Firms</h3>
-        <p>Auditors who need evidence they can independently verify rather than dashboards they have to trust.</p>
+        <p>Auditors who need evidence they can independently verify, not dashboards they have to trust.</p>
       </div>
     </div>
   </div>
@@ -792,7 +793,7 @@
   <div class="container">
     <p class="section-label">Core Directives</p>
     <h2>Constitutional Principles</h2>
-    <p class="intro">NYRV operates under binding architectural constraints. These are not policies — they are code.</p>
+    <p class="intro">These are not policies — they are constraints in code, checked by tests.</p>
 
     <div class="directives-grid">
       <article class="directive-card">
@@ -804,31 +805,31 @@
       <article class="directive-card">
         <span class="directive-number">Directive 02</span>
         <h3>Append Only</h3>
-        <p>Events can only be added, never modified or deleted. The ledger is permanent. The record is immutable.</p>
+        <p>Events are added, never modified or deleted — an append-only schema enforced in code and in the database. No update path. No delete path.</p>
       </article>
 
       <article class="directive-card">
         <span class="directive-number">Directive 03</span>
-        <h3>No Content Storage</h3>
-        <p>NYRV sees metadata, never sensitive data. The record shows that something happened. NYRV never sees what it contained.</p>
+        <h3>Content-Blind</h3>
+        <p>NYRV records a content-blind commitment and producer-chosen labels — never the decision content, never field names. It can confirm a record exists. It never sees what it contained.</p>
       </article>
 
       <article class="directive-card">
         <span class="directive-number">Directive 04</span>
         <h3>Operator Independence</h3>
-        <p>NYRV maintains no financial or operational relationship with any party whose conduct NYRV observes. Multi-party witness attestation means no single entity, including NYRV, controls the evidence.</p>
+        <p>NYRV holds no financial or operational relationship with any party whose conduct it records. Today that independence is structural. Cryptographic independence — proof that even NYRV cannot rewrite the record — is the anchor layer, in design.</p>
       </article>
 
       <article class="directive-card">
         <span class="directive-number">Directive 05</span>
         <h3>Capability Ceiling</h3>
-        <p>NYRV has hard limits. It cannot make autonomous decisions. It cannot execute actions. Decision authority remains with the operators NYRV serves.</p>
+        <p>NYRV has hard limits. It cannot make autonomous decisions. It cannot execute actions. It cannot expand its own authority. Decision authority remains with the operators it serves.</p>
       </article>
 
       <article class="directive-card">
         <span class="directive-number">Directive 06</span>
-        <h3>Verifiable by Construction</h3>
-        <p>Every claim NYRV makes about an observed AI system is cryptographically verifiable by any third party. The architecture produces evidence the customer does not have to trust NYRV to verify.</p>
+        <h3>Verifiable by Third Parties</h3>
+        <p>The math is independent: anyone can run the open-source verifier, with no NYRV dependency, and confirm a record binds to the decision disclosed. Trust no one — check it yourself.</p>
       </article>
     </div>
   </div>
@@ -836,103 +837,69 @@
 
 <!-- ============================================================ -->
 <!-- ARCHITECTURE                                                  -->
+<!-- (Multi-Anchor card removed: named a specific mechanism,       -->
+<!--  reserved for ADR-0003. Witness card reframed as in-design.)  -->
 <!-- ============================================================ -->
 <section id="architecture">
   <div class="container">
     <p class="section-label">Architecture</p>
-    <h2>Architectural Commitments</h2>
-    <p class="intro">The architecture produces the trust property. Each commitment is enforced in code and reviewable in the open repository.</p>
+    <h2>By Design</h2>
+    <p class="intro">What is tested is the architecture; implementation follows it, not the other way around. In force and in design are marked plainly.</p>
 
     <div class="arch-grid">
       <div class="arch-card">
-        <h3>Hash-Chained Integrity</h3>
-        <p>Each event includes the hash of the prior event. Any modification breaks the chain. Mathematically provable integrity.</p>
+        <h3>Hash-Chained Records</h3>
+        <p>Each record links to its predecessor by hash. Anyone can recompute the chain and confirm it is internally consistent.</p>
       </div>
 
       <div class="arch-card">
         <h3>Durable Ledger</h3>
-        <p>PostgreSQL-backed persistence. Append-only schema, enforced in code and at the database level. No update path. No delete path.</p>
+        <p>PostgreSQL-backed, append-only schema enforced in code and at the database level. No update path. No delete path.</p>
       </div>
 
       <div class="arch-card">
-        <h3>Synchronous Evidence</h3>
-        <p>Evidence artifacts returned in the same call as the observation. The recording is confirmed before the operating system proceeds.</p>
+        <h3>Synchronous Receipt</h3>
+        <p>Each observation returns a receipt in the same call — record id, timestamp, and chain hashes. Your system confirms the record landed before it proceeds.</p>
       </div>
 
       <div class="arch-card">
-        <h3>Evidence Artifacts</h3>
-        <p>Structured proof returned with every observation. Includes timestamp, hash, chain position, and verification path.</p>
+        <h3>Content-Blind by Construction</h3>
+        <p>The producer commits client-side; the codebase has no path for decision content to reach the ledger. Privacy and a smaller trust surface, by construction.</p>
       </div>
 
       <div class="arch-card">
-        <h3>Multi-Party Witness Attestation</h3>
-        <p>Independent institutional witnesses co-sign log checkpoints. No single entity — including NYRV — can rewrite history. Operator independence by architecture, not by promise.</p>
+        <h3>Operator-Independence Layer — in design</h3>
+        <p>Today a producer cannot prove NYRV did not alter a record, and the timestamp is NYRV-asserted. The layer that closes this — independent anchoring, so a record's integrity and timing do not rest on NYRV — is in design; the mechanism is a reserved decision. NYRV describes the property it is building toward, never claims it as built.</p>
       </div>
 
       <div class="arch-card">
-        <h3>Multi-Anchor External Verification</h3>
-        <p>Checkpoints anchor to public infrastructure through an N-of-M strategy — OpenTimestamps to Bitcoin, RFC 3161 timestamp authorities, OriginStamp to Ethereum. No single anchor failure compromises the record.</p>
+        <h3>Per-Tenant Isolation — by design</h3>
+        <p>Cryptographic boundaries between organizations. Your records are yours alone. No commingling, by design.</p>
       </div>
     </div>
-  </div>
-</section>
-
-<!-- ============================================================ -->
-<!-- TIERED SERVICE                                                -->
-<!-- ============================================================ -->
-<section id="tiers">
-  <div class="container">
-    <p class="section-label">Tiered Service</p>
-    <h2>Four service tiers. One unitary brand.</h2>
-
-    <p>NYRV operates across four service tiers. Multi-witness verification is the baseline product at Standard tier and above. What is premium is governance customization, regulatory engagement, and operational rigor — not the multi-witness protocol itself.</p>
-
-    <div class="tier-grid">
-      <div class="tier-card">
-        <h3>NYRV Eval</h3>
-        <p class="tier-detail">VCP Silver-compatible</p>
-        <p>Developer adoption tier. NYRV-only signing. Daily anchor frequency. Evidence honestly disclosed as not suitable for regulatory submission.</p>
-      </div>
-
-      <div class="tier-card">
-        <h3>NYRV Standard</h3>
-        <p class="tier-detail">VCP Gold-compatible</p>
-        <p>The thesis-grade product. Multi-witness verification with NYRV's curated institutional witness set. Hourly anchor frequency.</p>
-      </div>
-
-      <div class="tier-card">
-        <h3>NYRV Regulated</h3>
-        <p class="tier-detail">VCP Platinum-compatible</p>
-        <p>Enterprise tier with HSM-backed keys, SOC 2 Type II, ISO 27001, and sector-specific compliance work. Ten-minute anchor frequency.</p>
-      </div>
-
-      <div class="tier-card">
-        <h3>NYRV Sovereign</h3>
-        <p class="tier-detail">Bespoke engagement</p>
-        <p>Custom witness composition, bespoke regulatory engagement, white-glove operational support, dedicated technical account management.</p>
-      </div>
-    </div>
-
-    <p class="tier-discipline">Each evidence artifact cryptographically declares the tier under which it was produced. Tier-washing is structurally impossible.</p>
   </div>
 </section>
 
 <!-- ============================================================ -->
 <!-- STANDARDS                                                     -->
+<!-- (AAP paragraph removed: unverified VSO published-profile      -->
+<!--  claims + present-tense "is contributing". Witness extension  -->
+<!--  reframed as reserved, not operated.)                         -->
 <!-- ============================================================ -->
 <section id="standards">
   <div class="container">
     <p class="section-label">Standards Alignment</p>
-    <h2>Standing on open standards.</h2>
+    <h2>Standing on an open standard.</h2>
 
-    <p>NYRV operates VeritasChain Protocol (VCP) v1.1 conformant infrastructure. VCP is published by the <a href="https://veritaschain.org" rel="noopener">VeritasChain Standards Organization</a>, a vendor-neutral non-profit advancing the protocol through the IETF SCITT working group.</p>
+    <p>NYRV operates VeritasChain Protocol (VCP) v1.1-conformant infrastructure. VCP is published by the <a href="https://veritaschain.org" rel="noopener">VeritasChain Standards Organization</a> (VSO), an independent, vendor-neutral standards body — an open, public, reviewable standard rather than a proprietary architecture.</p>
 
-    <p>The discipline of operating against an open standard — rather than inventing a proprietary architecture — means NYRV's customers do not have to take NYRV's word for the architecture's correctness. The specification is public, reviewable, and subject to independent technical scrutiny. NYRV's value is the operated infrastructure that implements it.</p>
+    <p>That discipline means customers do not have to take NYRV's word for the architecture's correctness; the specification is public, licensed CC BY 4.0, and open to independent technical scrutiny. NYRV's value is the operated infrastructure that implements it.</p>
 
-    <p>NYRV is contributing an Agent Action Profile (AAP) to VeritasChain's domain profile series — a forthcoming specification extending VAP to the AI agent verification domain, alongside the published profiles for algorithmic trading, content provenance, and public administration.</p>
-    <p>NYRV's architectural commitment to VCP v1.1 conformance is documented in <a href="https://github.com/Saabe-CEO/nyrv/blob/main/docs/adr/0002-vcp-v1-1-conformance.md" rel="noopener">ADR-0002</a>, available in the repository. The document specifies the conformance commitment and the multi-party institutional witness extension operated as a service layer above the protocol.</p>
+    <p>The direction is industry-wide: the IETF's SCITT working group is standardizing exactly this class of transparency infrastructure.</p>
 
-    <p class="standards-detail">VCP is licensed under CC BY 4.0. NYRV is one implementation; the protocol exists independent of any single operator.</p>
+    <p>NYRV's VCP v1.1 conformance commitment is documented in <a href="https://github.com/Saabe-CEO/nyrv/blob/main/docs/adr/0002-vcp-v1-1-conformance.md" rel="noopener">ADR-0002</a> in the repository. The operator-independence extension above the protocol is a reserved decision — not yet operated.</p>
+
+    <p class="standards-detail">NYRV is one implementation; the protocol exists independent of any single operator.</p>
   </div>
 </section>
 
@@ -943,60 +910,58 @@
   <div class="container">
     <p class="section-label">Integration</p>
     <h2>How It Works</h2>
-    <p class="intro">One call. Synchronous proof. The architecture is simple because the principle is simple.</p>
+    <p class="intro">Commit client-side. Send only the commitment. Verify offline. The flow is simple because the principle is.</p>
 
     <ol class="integration-steps">
       <li>
         <span class="step-number">1</span>
-        <h3>Observe</h3>
-        <p>The operating system sends an event to NYRV when an action occurs.</p>
+        <h3>Commit</h3>
+        <p>Your system commits to each decision client-side with the open-source SDK — a salted hash — and keeps the disclosure record. The decision content never leaves your system.</p>
       </li>
 
       <li>
         <span class="step-number">2</span>
         <h3>Record</h3>
-        <p>NYRV hashes, chains, and persists the event to the durable ledger.</p>
+        <p>NYRV receives only the commitment and your labels, chains it, and persists it to the append-only ledger. NYRV never sees the content.</p>
       </li>
 
       <li>
         <span class="step-number">3</span>
-        <h3>Return</h3>
-        <p>An evidence artifact is returned synchronously with proof of recording.</p>
+        <h3>Receipt</h3>
+        <p>NYRV returns a synchronous receipt — record id, timestamp, chain hashes — so your system confirms the record landed.</p>
       </li>
 
       <li>
         <span class="step-number">4</span>
-        <h3>Witness</h3>
-        <p>Chain checkpoints are co-signed by independent institutional witnesses and anchored to public infrastructure. Anyone can verify the log's integrity against multiple parties NYRV does not control.</p>
+        <h3>Verify</h3>
+        <p>Later, anyone you hand a bundle to runs the open-source verifier and confirms — offline, with no trust in NYRV — that a disclosed decision binds to exactly that record.</p>
       </li>
     </ol>
   </div>
 </section>
 
 <!-- ============================================================ -->
-<!-- EVIDENCE STRUCTURE                                            -->
+<!-- RECEIPT STRUCTURE                                             -->
+<!-- (Corrected to the verified /v1/observe response. Removed      -->
+<!--  checkpoint / anchors / policy_id / verify_url — none in      -->
+<!--  force — and the wrong field names.)                          -->
 <!-- ============================================================ -->
 <section id="evidence">
   <div class="container">
-    <p class="section-label">Evidence Structure</p>
+    <p class="section-label">Receipt Structure</p>
     <h2>What You Get Back</h2>
-    <p class="intro">Every observation returns a structured artifact with everything needed for independent verification.</p>
+    <p class="intro">Each accepted observation returns a receipt in the same call. The disclosure record you keep client-side is what later opens the commitment for verification.</p>
 
     <pre><code>{
   "accepted": true,
   "durable": true,
-  "rid": "&lt;request-id&gt;",
-  "timestamp": "&lt;ISO-8601&gt;",
-  "hash": "sha256:&lt;...&gt;",
-  "chain_position": &lt;integer&gt;,
-  "previous_hash": "sha256:&lt;...&gt;",
-  "checkpoint": "&lt;witnessed-checkpoint-reference&gt;",
-  "anchors": ["&lt;opentimestamps&gt;", "&lt;rfc3161-tsa&gt;", "&lt;originstamp&gt;"],
-  "policy_id": "&lt;tier-identifier&gt;",
-  "verify_url": "/v1/verify/&lt;rid&gt;"
+  "rid": "&lt;record-id&gt;",
+  "timestamp": "&lt;ISO-8601 UTC&gt;",
+  "previous_record_hash": "&lt;hash — present when durably chained&gt;",
+  "record_hash": "&lt;hash — present when durably chained&gt;"
 }</code></pre>
 
-    <p class="caveat">Example structure. First live artifact pending Phase 1 operational deployment.</p>
+    <p class="caveat">The chain hashes are included once the record is durably chained. The commitment is never returned — it stays in your client-side disclosure record.</p>
   </div>
 </section>
 
@@ -1006,11 +971,11 @@
 <section id="status">
   <div class="container">
     <p class="section-label">Current Status</p>
-    <h2>Foundation deployed. Witnessed transparency log architecture under active development.</h2>
+    <h2>Foundation built. Operator-independence layer in design.</h2>
 
-    <p>NYRV's production foundation is operational. Architecture documented and tested. Production database schema verified. The witnessed transparency log architecture is under active development; Phase 1 operational deployment is targeted for mid-2027.</p>
+    <p>The content-blind commitment ingest, the SDK, and the open-source verifier are in the repository. The operator-independence (anchor) layer and a public, self-serve verification path are in design. NYRV is not "production complete," and won't say it is.</p>
 
-    <p><strong>Engaging design partners now.</strong> Organizations facing active regulatory pressure with current compliance evidence gaps are invited to participate in Phase 1 deployment. Reach out through the contact information below.</p>
+    <p><strong>Engaging design partners now.</strong> Organizations under active regulatory pressure with current evidence gaps are invited to take part. Reach out through the contact information below.</p>
 
     <p>The codebase is open for inspection at <a href="https://github.com/Saabe-CEO/nyrv">github.com/Saabe-CEO/nyrv</a>.</p>
   </div>
@@ -1028,7 +993,8 @@
 </section>
 
 <!-- ============================================================ -->
-<!-- FOOTER                                                        -->
+<!-- FOOTER  (EIN removed; ownership descriptor in place of        -->
+<!--  unverified certification-status claims)                      -->
 <!-- ============================================================ -->
 <footer id="contact">
   <div class="container">
@@ -1038,12 +1004,12 @@
     </div>
 
     <p class="corporate">
-      NYRV is operated by Neural Yielding Recognition Vector Technologies, Incorporated.<br>
-      Delaware C-Corp · EIN 42-2402068 · Las Vegas, NV
+      NYRV is Neural Yielding Recognition Vector Technologies, Incorporated.<br>
+      Delaware C-Corp · Las Vegas, NV
     </p>
 
     <p class="certifications">
-      NYRV is a service-disabled veteran-owned business (SDVOSB certification in progress, FY26) and a Black-owned enterprise (MBE certification in progress, FY26).
+      A service-disabled veteran-owned and Black-owned business.
     </p>
 
     <p class="footer-links">
